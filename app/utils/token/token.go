@@ -12,7 +12,7 @@ import (
 )
 
 func Generate(userId uint) (string, error) {
-	tokenLifeSpan, err := strconv.Atoi(os.Getenv("TOKEN_LIFE_SPAN"))
+	tokenLifeSpan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
 
 	if err != nil {
 		return "", err

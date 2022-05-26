@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"go-todo/main/app/utils/token"
 
 	"github.com/jinzhu/gorm"
@@ -32,6 +33,22 @@ func (user *User) BeforeSave() error {
 
 	user.Password = string(hashedPassword)
 	return nil
+}
+
+func GetUserById(userId uint) (User, error) {
+	var user User
+
+	if err := DB.First(&user, userId).Error; err != nil {
+		return user, errors.New("User Not Found")
+	}
+
+	user.PrepareGive()
+
+	return user, nil
+}
+
+func (user *User) PrepareGive() {
+	user.Password = ""
 }
 
 func VerifyPassword(password, hashedPassword string) error {

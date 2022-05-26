@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"go-todo/main/app/models"
+	"go-todo/main/app/utils/token"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -62,4 +63,22 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+func User(c *gin.Context) {
+	userId, err := token.ExtractTokenId(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := models.GetUserById(userId)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "success", "data": user})
 }
