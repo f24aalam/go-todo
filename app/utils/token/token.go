@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 func Generate(userId uint) (string, error) {
@@ -18,13 +18,19 @@ func Generate(userId uint) (string, error) {
 		return "", err
 	}
 
-	claims := jwt.MapClaims{}
-	claims["authorized"] = true
-	claims["user_id"] = userId
-	claims["exp"] = time.Now().Add(time.Hour * time.Duration(tokenLifeSpan)).Unix()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"authorized": true,
+		"user_id":    userId,
+		"exp":        time.Now().Add(time.Hour * time.Duration(tokenLifeSpan)).Unix(),
+	})
 
-	return token.SignedString([]byte(os.Getenv("API_SECRET")))
+	tokenString, err := token.SignedString([]byte(os.Getenv("API_SECRET")))
+
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
 }
 
 func TokenValid(c *gin.Context) error {
