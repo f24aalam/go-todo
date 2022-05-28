@@ -37,6 +37,6 @@ func ConnectDatabase() {
 		fmt.Println("Connected to database", DbDriver)
 	}
 
-	DB.AutoMigrate(&User{}, &Category{})
+	DB.AutoMigrate(&User{}, &Category{}, &Task{})
 
 }

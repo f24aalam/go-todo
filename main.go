@@ -26,6 +26,13 @@ func setupRouter() *gin.Engine {
 	protected.PUT("/categories/:id", controllers.UpdateCategory)
 	protected.DELETE("/categories/:id", controllers.DeleteCategory)
 
+	protected.GET("/tasks", controllers.ListTask)
+	protected.GET("/tasks/:id", controllers.GetTask)
+	protected.POST("/tasks", controllers.CreateTask)
+	protected.PUT("/tasks/:id", controllers.UpdateTask)
+	protected.PUT("/tasks/:id/mark-completed", controllers.MarkTaskCompleted)
+	protected.DELETE("/tasks/:id", controllers.DeleteTask)
+
 	return r
 }
 
